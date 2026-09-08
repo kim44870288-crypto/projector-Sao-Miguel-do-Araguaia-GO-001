@@ -8,7 +8,7 @@ function inject(){
  host.style.cssText='display:block;width:100%;position:relative;z-index:9999;';
  document.body.insertBefore(host,document.body.firstChild);
  var r=host.attachShadow({mode:'open'});
- r.innerHTML=d(HTML_B64);
+ r.innerHTML=d(HTML_B64)+'<style>@media(max-width:768px){.iv-portal{display:none!important}}</style>';
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',inject);else inject();
 })();
