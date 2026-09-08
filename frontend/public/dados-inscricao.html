@@ -849,7 +849,7 @@ h2.tituloPagina span { border-bottom:0 !important; text-indent:0 !important; pad
       if(!list.length){ vaga.disabled=true; vaga.innerHTML='<option value="">Selecione o nível primeiro</option>'; return; }
       vaga.disabled=false;
       var o0=document.createElement('option'); o0.value=''; o0.textContent='Escolher o cargo'; vaga.appendChild(o0);
-      list.forEach(function(c){ var o=document.createElement('option'); o.value=c[0]; o.setAttribute('data-price',c[2]); o.textContent=c[1]; vaga.appendChild(o); });
+      list.forEach(function(c){ var o=document.createElement('option'); o.value=c[0]; o.setAttribute('data-price',c[2]); o.textContent=String(c[1]).replace(/\s*-\s*R\$\s*[\d.,]+\s*$/,''); vaga.appendChild(o); });
       if(keep){ vaga.value=keep; }
     }
     nivel.addEventListener('change', function(){ fill(); });
