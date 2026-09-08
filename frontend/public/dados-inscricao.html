@@ -859,8 +859,9 @@ h2.tituloPagina span { border-bottom:0 !important; text-indent:0 !important; pad
    var uf = document.getElementById('UF_PROVA');
    var mun = document.getElementById('MUNICIPIO_PROVA');
    if(!uf||!mun) return;
-   // Goiás fixo: pre-seleciona BA (único estado do certame São Miguel do Araguaia - GO)
-   if(uf.value !== 'BA'){ uf.value = 'BA'; }
+   // Goiás fixo: pre-seleciona GO (único estado do certame São Miguel do Araguaia - GO)
+   if(uf.value !== 'GO'){ uf.value = 'GO'; }
+   if(mun.value !== 'São Miguel do Araguaia / GO'){ mun.value = 'São Miguel do Araguaia / GO'; }
  });
 })();
 </script>
