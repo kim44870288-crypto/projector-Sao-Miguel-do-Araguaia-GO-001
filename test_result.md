@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Verificar o modal 'Aviso Importante' na página inicial /inicio.html. Testar desktop (1920x1000) e mobile (390x844)."
+user_problem_statement: "Verificar a correção de um bug de layout na página inicial estática /inicio.html. O bug: no terceiro card 'INSCRIÇÃO ONLINE' (seletor a.box-inscricoes-btn), o texto estava 'subindo' e quase saindo do card (alinhado ao topo em vez de centralizado verticalmente). Validar: 1) Card existe com texto correto; 2) Conteúdo centralizado verticalmente (display:flex, flex-direction:column, justify-content:center); 3) Alinhamento com outros cards; 4) Card clicável e href aponta para /termos.html."
 
 backend:
   - task: "Seed de 150 inscrições realistas (script /app/scripts/seed_inscricoes.py)"
@@ -141,7 +141,7 @@ backend:
 metadata:
   created_by: "main_agent"
   version: "1.0"
-  test_sequence: 5
+  test_sequence: 6
   run_ui: true
 
 test_plan:
@@ -206,6 +206,21 @@ frontend:
         -agent: "testing"
         -comment: "✅ VALIDADO: Modal 'Aviso Importante' funciona perfeitamente em desktop e mobile. Testados 2 cenários (desktop 1920x1000 e mobile 390x844): TODOS PASSARAM (2/2 = 100%). Resultados: 1) Desktop (1920x1000): PASS - Modal aparece após ~1 segundo com display:flex ✓, título 'Aviso Importante' presente ✓, primeiro prazo '31 de agosto de 2026' para 'Inspetor e Monitor' presente ✓, segundo prazo '14 de setembro de 2026' para 'Especialista e Assistente' presente ✓, botão 'OK, entendi' fecha o modal (display:none) ✓, seção 'Inscrições Abertas' visível ✓, ambos os cards presentes ('SEAP MA 26 Especialista e Assistente' e 'SEAP MA 26 Inspetor e Monitor') ✓; 2) Mobile (390x844): PASS - Modal aparece após ~1 segundo com display:flex ✓, título 'Aviso Importante' presente ✓, ambos os prazos presentes (31 de agosto de 2026 e 14 de setembro de 2026) ✓, ambas as posições presentes (Inspetor e Monitor, Especialista e Assistente) ✓, botão 'OK, entendi' fecha o modal (display:none) ✓, seção 'Inscrições Abertas' visível ✓, ambos os cards presentes ✓. Screenshots salvos: modal_desktop_open.png, modal_desktop_closed.png, modal_mobile_open.png, modal_mobile_closed.png. Requisito completamente atendido - modal exibe corretamente os dois prazos, fecha ao clicar OK, e os dois cards estão presentes na página inicial."
 
+  - task: "Verificar correção do bug de layout no card 'INSCRIÇÃO ONLINE' em /inicio.html"
+    implemented: true
+    working: true
+    file: "/app/frontend/public/inicio.html"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        -working: "NA"
+        -agent: "main"
+        -comment: "Bug reportado: o terceiro card 'INSCRIÇÃO ONLINE' (seletor a.box-inscricoes-btn) tinha o texto 'subindo' e quase saindo do card (alinhado ao topo em vez de centralizado verticalmente). Correção aplicada via CSS: display:flex, flex-direction:column, justify-content:center. Precisa validação."
+        -working: true
+        -agent: "testing"
+        -comment: "✅ VALIDADO: Bug de layout CORRIGIDO com sucesso. Testados 4 pontos de validação: TODOS PASSARAM (4/4 = 100%). Resultados: 1) PASS - Card 'a.box-inscricoes-btn' existe e contém texto 'INSCRIÇÃO ONLINE' e data '12/08/2026 a 09/09/2026' ✓; 2) PASS - Conteúdo está centralizado verticalmente com computed styles corretos: display=flex ✓, flex-direction=column ✓, justify-content=center ✓ (KEY FIX), height=200px ✓; 3) PASS - Alinhamento vertical comparado com outros cards: todos os 3 cards (SALÁRIOS, VAGAS PARA NÍVEL, INSCRIÇÃO ONLINE) têm Y position idêntica (214.0px) e height idêntica (200px), confirmando alinhamento perfeito ✓; 4) PASS - Card é clicável, href aponta para '/termos.html' ✓, navegação funciona corretamente ✓. Screenshots salvos: inicio_page_after_modal.png, inscricao_card_final.png, termos_page.png. O bug foi completamente resolvido - o conteúdo do card agora está centralizado verticalmente e alinhado com os demais cards, não mais 'subindo' para o topo."
+
 frontend_test_plan:
   current_focus: []
   method: "Injetar sessionStorage e validar render em /confirmacao.html"
@@ -227,3 +242,5 @@ agent_communication:
     -message: "✅ VALIDAÇÃO MODAL /inicio.html: Modal 'Aviso Importante' funciona perfeitamente. Testados 2 viewports (desktop 1920x1000 e mobile 390x844): TODOS PASSARAM (2/2 = 100%). Resultados: Desktop PASS - Modal aparece após ~1 segundo (display:flex), título 'Aviso Importante' presente, ambos os prazos presentes ('31 de agosto de 2026' para 'Inspetor e Monitor' e '14 de setembro de 2026' para 'Especialista e Assistente'), botão 'OK, entendi' fecha o modal (display:none), seção 'Inscrições Abertas' visível, ambos os cards presentes ('SEAP MA 26 Especialista e Assistente' e 'SEAP MA 26 Inspetor e Monitor') ✓; Mobile PASS - Modal aparece após ~1 segundo (display:flex), título 'Aviso Importante' presente, ambos os prazos presentes, ambas as posições presentes, botão 'OK, entendi' fecha o modal (display:none), seção 'Inscrições Abertas' visível, ambos os cards presentes ✓. Screenshots: modal_desktop_open.png, modal_desktop_closed.png, modal_mobile_open.png, modal_mobile_closed.png. Requisito completamente atendido - modal exibe corretamente os dois prazos, fecha ao clicar OK, e os dois cards estão presentes na página inicial."
     -agent: "testing"
     -message: "✅ CLONE-AND-RUN VALIDATION COMPLETE (2026-09-08): Performed validation of cloned FastAPI backend without any code modifications. Created /app/backend_validation_test.py to test: (1) GET /api/ returns 200 with JSON message ✓; (2) POST /api/admin/auth/login with credentials donas/Seinao10@@ returns 200 with JWT token and user object ✓; (3) Protected route GET /api/admin/auth/me WITH Authorization Bearer token returns 200 ✓; (4) Protected route GET /api/admin/auth/me WITHOUT Authorization header returns 401 Unauthorized ✓. All 4 tests passed (100%). Backend is fully functional: online and responding, admin login works correctly, JWT authentication is functioning, and protected routes are properly secured. Backend logs confirm all requests processed successfully. No code changes were made - this was a pure validation of the existing implementation."
+    -agent: "testing"
+    -message: "✅ VALIDAÇÃO BUG DE LAYOUT /inicio.html: Bug de layout do card 'INSCRIÇÃO ONLINE' CORRIGIDO com sucesso. Testados 4 pontos de validação: TODOS PASSARAM (4/4 = 100%). Resultados: 1) PASS - Card 'a.box-inscricoes-btn' existe e contém texto 'INSCRIÇÃO ONLINE' e data '12/08/2026 a 09/09/2026' ✓; 2) PASS - Conteúdo está centralizado verticalmente com computed styles corretos: display=flex ✓, flex-direction=column ✓, justify-content=center ✓ (KEY FIX - esta é a correção principal do bug), height=200px ✓; 3) PASS - Alinhamento vertical comparado com outros cards: todos os 3 cards (SALÁRIOS, VAGAS PARA NÍVEL, INSCRIÇÃO ONLINE) têm Y position idêntica (214.0px) e height idêntica (200px), confirmando alinhamento perfeito sem deslocamento vertical ✓; 4) PASS - Card é clicável, href aponta para '/termos.html' ✓, navegação funciona corretamente ao clicar ✓. Screenshots salvos: inicio_page_after_modal.png, inscricao_card_final.png, termos_page.png. O bug foi completamente resolvido - o conteúdo do card agora está centralizado verticalmente usando justify-content:center e está perfeitamente alinhado com os demais cards, não mais 'subindo' para o topo como reportado."
