@@ -794,36 +794,46 @@ h2.tituloPagina span { border-bottom:0 !important; text-indent:0 !important; pad
 <select class="select" data-testid="select-concurso" id="CONCURSO_TIPO">
 <option value="1" selected="">Prefeitura Municipal de São Miguel do Araguaia - GO</option>
 </select></div>
+<div class="fgv-field"><label><span class="error">*</span> Nível de Escolaridade</label>
+<select class="select" data-testid="select-nivel" id="NIVEL" name="NIVEL" required="">
+<option selected="" value="">Selecione o nível</option>
+<option value="FUND_COMP">Ensino Fundamental Completo</option>
+<option value="FUND_INC">Ensino Fundamental Incompleto</option>
+<option value="MEDIO">Ensino Médio/Técnico</option>
+<option value="SUPERIOR">Ensino Superior</option>
+</select></div>
 <div class="fgv-field"><label><span class="error">*</span> Cargo</label>
 <select class="select" data-testid="select-vaga" id="VAGA" name="VAGA" required="" disabled="">
-<option selected="" value="">Escolha o concurso primeiro</option>
+<option selected="" value="">Selecione o nível primeiro</option>
 </select></div>
 <script>
-/* Vaga em 2 etapas: escolhe o concurso e o 2º select mostra só as vagas dele. */
+/* Cargo em 2 etapas: escolhe o Nível e o 2º select mostra só os cargos daquele nível. */
 (function(){
-  var CARGOS={
-    '1':[['401','401 - AUXILIAR DE SERVICOS GERAIS (Nivel Fundamental) - Sao Miguel do Araguaia/GO - R$ 80,00','80.00'],['402','402 - TECNICO ADMINISTRATIVO (Nivel Medio/Tecnico) - Sao Miguel do Araguaia/GO - R$ 100,00','100.00'],['403','403 - PROFESSOR / ANALISTA (Nivel Superior) - Sao Miguel do Araguaia/GO - R$ 130,00','130.00']]
+  var CARGOS_BY_LEVEL={
+    'FUND_COMP':[['101','AGENTE DE APOIO ASSISTENCIAL - R$ 125,00','125.00'],['102','AUXILIAR DE CUIDADOR - R$ 125,00','125.00'],['103','TÉCNICO DE NÍVEL FUNDAMENTAL - R$ 125,00','125.00']],
+    'FUND_INC':[['201','AUTOELETRICISTA - R$ 125,00','125.00'],['202','AUXILIAR DE LIMPEZA GERAL - R$ 125,00','125.00'],['203','AUXILIAR DE LIMPEZA PÚBLICA - R$ 125,00','125.00'],['204','AUXILIAR DE SERVIÇOS DE HIGIENE E ALIMENTAÇÃO - R$ 125,00','125.00'],['205','AUXILIAR DE SERVIÇOS DE SAÚDE - R$ 125,00','125.00'],['206','AUXILIAR DE VIGILÂNCIA - R$ 125,00','125.00'],['207','BORRACHEIRO - R$ 125,00','125.00'],['208','CARPINTEIRO - R$ 125,00','125.00'],['209','COLETOR DE RECICLÁVEIS - R$ 125,00','125.00'],['210','ELETRICISTA - R$ 125,00','125.00'],['211','ENCANADOR - R$ 125,00','125.00'],['212','LAVADOR E ENGRAXATE DE VEÍCULOS - R$ 125,00','125.00'],['213','MECÂNICO - R$ 125,00','125.00'],['214','OPERADOR DE MÁQUINAS LEVES - R$ 125,00','125.00'],['215','OPERADOR DE MÁQUINAS PESADAS - R$ 125,00','125.00'],['216','PEDREIRO - R$ 125,00','125.00'],['217','PINTOR PREDIAL - R$ 125,00','125.00'],['218','SERRALHEIRO - R$ 125,00','125.00'],['219','SOLDADOR - R$ 125,00','125.00'],['220','TRABALHADOR BRAÇAL - R$ 125,00','125.00']],
+    'MEDIO':[['301','AGENTE COMUNITÁRIO DE SAÚDE - R$ 150,00','150.00'],['302','AGENTE DE COMBATE ÀS ENDEMIAS - R$ 150,00','150.00'],['303','AGENTE DE SERVIÇOS ADMINISTRATIVOS - R$ 150,00','150.00'],['304','ASSISTENTE ADMINISTRATIVO - R$ 150,00','150.00'],['305','AUXILIAR DE SAÚDE BUCAL - R$ 150,00','150.00'],['306','AUXILIAR DE SECRETARIA - R$ 150,00','150.00'],['307','CONDUTOR DE VEÍCULOS DE EMERGÊNCIA - R$ 150,00','150.00'],['308','CONDUTOR DE VEÍCULOS LEVES - R$ 150,00','150.00'],['309','CONDUTOR DE VEÍCULOS PESADOS - R$ 150,00','150.00'],['310','CUIDADOR - R$ 150,00','150.00'],['311','FISCAL DA VIGILÂNCIA SANITÁRIA - R$ 150,00','150.00'],['312','FISCAL DE MEIO AMBIENTE - R$ 150,00','150.00'],['313','FISCAL DE OBRAS E POSTURAS - R$ 150,00','150.00'],['314','FISCAL DE TRÂNSITO - R$ 150,00','150.00'],['315','FISCAL DE TRIBUTOS - R$ 150,00','150.00'],['316','MONITOR DE MÚSICA - R$ 150,00','150.00'],['317','PROFISSIONAL DE APOIO À INCLUSÃO - R$ 150,00','150.00'],['318','SECRETÁRIO ESCOLAR - R$ 150,00','150.00'],['319','TÉCNICO DE IMOBILIZAÇÃO ORTOPÉDICA - R$ 150,00','150.00'],['320','TÉCNICO DE INFORMÁTICA - R$ 150,00','150.00'],['321','TÉCNICO DE NÍVEL MÉDIO - R$ 150,00','150.00'],['322','TÉCNICO EM ENFERMAGEM - R$ 150,00','150.00'],['323','TÉCNICO EM HIGIENE BUCAL - R$ 150,00','150.00'],['324','TÉCNICO EM LABORATÓRIO - R$ 150,00','150.00'],['325','TÉCNICO EM RADIOLOGIA - R$ 150,00','150.00']],
+    'SUPERIOR':[['401','ANALISTA DE LICENCIAMENTO AMBIENTAL - R$ 175,00','175.00'],['402','ANALISTA DE USO DO SOLO - R$ 175,00','175.00'],['403','ASSISTENTE SOCIAL - R$ 175,00','175.00'],['404','BIOMÉDICO - R$ 175,00','175.00'],['405','EDUCADOR FÍSICO - R$ 175,00','175.00'],['406','ENFERMEIRO - R$ 175,00','175.00'],['407','FARMACÊUTICO - R$ 175,00','175.00'],['408','FISIOTERAPEUTA - R$ 175,00','175.00'],['409','FONOAUDIÓLOGO - R$ 175,00','175.00'],['410','MÉDICO - R$ 175,00','175.00'],['411','MÉDICO - ESP. CARDIOLOGISTA - R$ 175,00','175.00'],['412','MÉDICO - ESP. CIRURGIÃO GERAL - R$ 175,00','175.00'],['413','MÉDICO - ESP. ENDOCRINOLOGISTA - R$ 175,00','175.00'],['414','MÉDICO - ESP. GERIATRA - R$ 175,00','175.00'],['415','MÉDICO - ESP. GINECOLOGISTA - R$ 175,00','175.00'],['416','MÉDICO - ESP. NEFROLOGISTA - R$ 175,00','175.00'],['417','MÉDICO - ESP. NEUROLOGISTA - R$ 175,00','175.00'],['418','MÉDICO - ESP. OBSTETRA - R$ 175,00','175.00'],['419','MÉDICO - ESP. ORTOPEDISTA - R$ 175,00','175.00'],['420','MÉDICO - ESP. PEDIATRA - R$ 175,00','175.00'],['421','MÉDICO PSIQUIATRA - R$ 175,00','175.00'],['422','NUTRICIONISTA - R$ 175,00','175.00'],['423','ODONTÓLOGO - R$ 175,00','175.00'],['424','ODONTÓLOGO - ESP. - CIRURGIA INFANTIL - R$ 175,00','175.00'],['425','ODONTÓLOGO - ESP. - ENDODONTIA - R$ 175,00','175.00'],['426','ODONTÓLOGO - ESP. - PERIODONTISTA - R$ 175,00','175.00'],['427','PROFESSOR DE CIÊNCIAS - R$ 175,00','175.00'],['428','PROFESSOR DE EDUCAÇÃO FÍSICA - R$ 175,00','175.00'],['429','PROFESSOR DE GEOGRAFIA - R$ 175,00','175.00'],['430','PROFESSOR DE HISTÓRIA - R$ 175,00','175.00'],['431','PROFESSOR DE LÍNGUA INGLESA - R$ 175,00','175.00'],['432','PROFESSOR DE LÍNGUA PORTUGUESA - R$ 175,00','175.00'],['433','PROFESSOR DE MATEMÁTICA - R$ 175,00','175.00'],['434','PROFESSOR PEDAGOGO - R$ 175,00','175.00'],['435','PSICÓLOGO - R$ 175,00','175.00'],['436','PSICÓLOGO - ESP. INFANTIL - R$ 175,00','175.00'],['437','TÉCNICO DE NÍVEL SUPERIOR - R$ 175,00','175.00'],['438','VETERINÁRIO - R$ 175,00','175.00']]
   };
   function init(){
-    var tipo=document.getElementById('CONCURSO_TIPO'), vaga=document.getElementById('VAGA');
-    if(!tipo||!vaga) return;
+    var nivel=document.getElementById('NIVEL'), vaga=document.getElementById('VAGA');
+    if(!nivel||!vaga) return;
     function fill(keep){
-      var list=CARGOS[tipo.value]||[];
+      var list=CARGOS_BY_LEVEL[nivel.value]||[];
       vaga.innerHTML='';
-      if(!list.length){ vaga.disabled=true; vaga.innerHTML='<option value="">Escolha o concurso primeiro</option>'; return; }
+      if(!list.length){ vaga.disabled=true; vaga.innerHTML='<option value="">Selecione o nível primeiro</option>'; return; }
       vaga.disabled=false;
       var o0=document.createElement('option'); o0.value=''; o0.textContent='Escolher o cargo'; vaga.appendChild(o0);
       list.forEach(function(c){ var o=document.createElement('option'); o.value=c[0]; o.setAttribute('data-price',c[2]); o.textContent=c[1]; vaga.appendChild(o); });
       if(keep){ vaga.value=keep; }
     }
-    tipo.addEventListener('change', function(){ fill(); });
+    nivel.addEventListener('change', function(){ fill(); });
     var done=false;
     try{
       var saved=JSON.parse(sessionStorage.getItem('inscricao_dados')||'{}');
-      if(saved && saved.VAGA){ tipo.value='1'; fill(saved.VAGA); done=true; }
+      if(saved && saved.NIVEL){ nivel.value=saved.NIVEL; fill(saved.VAGA); done=true; }
     }catch(e){}
-    if(!done){ tipo.value='1'; fill(); }
-    tipo.disabled=true;
+    if(!done){ fill(); }
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
 })();

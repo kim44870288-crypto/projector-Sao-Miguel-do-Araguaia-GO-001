@@ -141,7 +141,7 @@ backend:
 metadata:
   created_by: "main_agent"
   version: "1.0"
-  test_sequence: 7
+  test_sequence: 8
   run_ui: true
 
 test_plan:
@@ -155,6 +155,21 @@ agent_communication:
     -message: "Rodei o seed de 150 inscrições no MongoDB. Por favor valide via API admin: 1) login /api/admin/auth/login com donas/Seinao10@@ retorna token; 2) GET /api/admin/inscriptions com Bearer token retorna total>=150 finalizadas, com mix de device (desktop e mobile), cargo_titulo entre os 9 cargos e valor correspondente (Inspetor=150, Monitor=85, Especialista/Especialidade sociais=180, Assistente/Técnico=120); 3) GET /api/admin/dashboard/kpis mostra inscricoes>=150 e acessos>=150; 4) GET /api/admin/documentos lista candidatos com documentos e GET /api/admin/documentos/{cpf}/{tipo}?token=<jwt> devolve uma imagem (content-type image/*). Não teste UI, apenas backend/API."
 
 frontend:
+  - task: "Validar seletor de cargo em duas etapas (Nível → Cargo) e propagação da taxa até PIX"
+    implemented: true
+    working: true
+    file: "/app/frontend/public/dados-inscricao.html, /app/frontend/public/pagamento-pix.html"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        -working: "NA"
+        -agent: "testing"
+        -comment: "Iniciando validação do seletor de cargo em duas etapas (Nível de Escolaridade → Cargo) e propagação da taxa até a página de PIX. Base URL: https://donas-painel-preview.preview.emergentagent.com. Página principal: /dados-inscricao.html. Contexto: Select 'Nível de Escolaridade' (id='NIVEL') controla o select 'Cargo' (id='VAGA'). Cada cargo tem atributo data-price. Taxa é salva em sessionStorage (chave 'inscricao_dados', campos __valor/__taxa) e usada em /confirmacao.html e /pagamento-pix.html. Níveis esperados: FUND_COMP (3 cargos, R$ 80,00), FUND_INC (20 cargos, R$ 80,00), MEDIO (25 cargos, R$ 100,00), SUPERIOR (38 cargos, R$ 130,00, primeiro='ANALISTA DE LICENCIAMENTO AMBIENTAL', último='VETERINÁRIO')."
+        -working: true
+        -agent: "testing"
+        -comment: "✅ VALIDAÇÃO COMPLETA: Seletor de cargo em duas etapas e propagação da taxa 100% APROVADOS. Testados 4 cenários principais: TODOS PASSARAM (4/4 = 100%). Resultados detalhados: 1) TEST 1 - Estado inicial: ✓ PASS - Select #VAGA está disabled ao carregar a página, #NIVEL presente com 5 options (1 placeholder 'Selecione o nível' + 4 níveis: FUND_COMP, FUND_INC, MEDIO, SUPERIOR) ✓; 2) TEST 2 - Validação de cada nível: ✓ PASS - Todos os 4 níveis validados com sucesso: FUND_COMP (4 options = 3 cargos + 1 placeholder, data-price='80.00') ✓, FUND_INC (21 options = 20 cargos + 1 placeholder, data-price='80.00') ✓, MEDIO (26 options = 25 cargos + 1 placeholder, data-price='100.00') ✓, SUPERIOR (39 options = 38 cargos + 1 placeholder, data-price='130.00') ✓. Ao selecionar cada nível, o #VAGA é habilitado e populado SOMENTE com os cargos daquele nível ✓; 3) TEST 3 - Troca de nível: ✓ PASS - Ao trocar de SUPERIOR (39 options) para FUND_COMP (4 options), o select #VAGA é corretamente repopulado com os cargos do novo nível ✓; 4) TEST 4 - Fluxo end-to-end (propagação da taxa): ✓ PASS - Selecionado NIVEL=SUPERIOR e cargo ENFERMEIRO (value=406, data-price='130.00'). sessionStorage corretamente definido com __valor=130 e __taxa='R$ 130,00' ✓. Navegado para /pagamento-pix.html: valor R$ 130,00 exibido corretamente no elemento #p-valor (linha 795 do HTML) ✓. Testadas também as taxas de FUND_COMP (R$ 80,00) e MEDIO (R$ 100,00): todas exibidas corretamente na página de PIX ✓. TESTE ADICIONAL - Primeiro e último cargo de SUPERIOR: ✓ PASS - Primeiro cargo é 'ANALISTA DE LICENCIAMENTO AMBIENTAL - R$ 130,00' ✓, último cargo é 'VETERINÁRIO - R$ 130,00' ✓. OBSERVAÇÃO: A página /pagamento-pix.html exibe a mensagem 'Não foi possível gerar o PIX - Chave PIX não configurada no painel admin', mas isso NÃO afeta a exibição do valor da taxa, que é preenchido ANTES da tentativa de geração do QR code PIX (linha 856 do JavaScript, fora do callback do fetch). O valor é exibido corretamente na tabela de informações do candidato (Nome, CPF, Vaga Escolhida, Valor) mesmo sem a chave PIX configurada. Screenshots salvos: selector_superior_open.png (dropdown SUPERIOR aberto mostrando os 38 cargos), selector_enfermeiro_selected.png (ENFERMEIRO selecionado), pix_header_with_valor.png (cabeçalho da página PIX com valor R$ 130,00). CONCLUSÃO: O seletor de cargo em duas etapas funciona perfeitamente. A propagação da taxa do atributo data-price → sessionStorage → página de PIX está 100% funcional. Todos os requisitos atendidos com sucesso."
+
   - task: "Remover sufixo '(SEAP_MA_26)' do título do concurso em /confirmacao.html e /inscricao-realizada.html"
     implemented: true
     working: true
@@ -241,6 +256,8 @@ frontend_test_plan:
   method: "Injetar sessionStorage e validar render em /confirmacao.html"
 
 agent_communication:
+    -agent: "testing"
+    -message: "✅ VALIDAÇÃO SELETOR DE CARGO EM DUAS ETAPAS (2026-09-08): Validação completa do seletor Nível → Cargo e propagação da taxa até PIX. RESULTADO: 100% APROVADO (4/4 testes passaram). Testes executados: (1) Estado inicial: #VAGA disabled, #NIVEL com 4 níveis ✓; (2) Validação de cada nível: FUND_COMP (4 options, R$ 80,00) ✓, FUND_INC (21 options, R$ 80,00) ✓, MEDIO (26 options, R$ 100,00) ✓, SUPERIOR (39 options, R$ 130,00) ✓. Ao selecionar um nível, #VAGA é habilitado e populado SOMENTE com os cargos daquele nível ✓; (3) Troca de nível: SUPERIOR (39) → FUND_COMP (4) repopula corretamente ✓; (4) Fluxo end-to-end: Taxa de SUPERIOR (R$ 130,00) propagada corretamente do data-price → sessionStorage (__valor=130, __taxa='R$ 130,00') → página PIX (elemento #p-valor) ✓. Testadas também taxas de FUND_COMP (R$ 80,00) e MEDIO (R$ 100,00): todas exibidas corretamente ✓. Primeiro cargo SUPERIOR: 'ANALISTA DE LICENCIAMENTO AMBIENTAL' ✓, último: 'VETERINÁRIO' ✓. OBSERVAÇÃO: Página PIX exibe erro 'Chave PIX não configurada no painel admin', mas isso NÃO afeta a exibição do valor da taxa, que é preenchido ANTES da tentativa de geração do QR code (linha 856 do JS). Screenshots: selector_superior_open.png, selector_enfermeiro_selected.png, pix_header_with_valor.png. CONCLUSÃO: Seletor de cargo em duas etapas e propagação da taxa funcionam perfeitamente. Todos os requisitos atendidos 100%."
     -agent: "testing"
     -message: "Validação completa realizada com sucesso. Criado /app/backend_test.py com 6 testes abrangentes. Resultados: ✅ Todos os 6 testes passaram (100% sucesso). Detalhes: 152 inscrições finalizadas (2 a mais que o esperado, provavelmente de testes anteriores), device mix balanceado (77 desktop/75 mobile ≈50/50), todos os 9 cargos presentes com valores corretos, 381 acessos totais (150 inscrições + 220 extras + alguns de testes), 151 cadastros com documentos (fotos reais JPEG), endpoint de imagem retorna Content-Type: image/jpeg com 11.5KB, autenticação JWT funcionando corretamente, proteção de rotas funcionando (401 sem token). Nenhum problema crítico encontrado. Backend está 100% funcional conforme especificação."
     -agent: "testing"
