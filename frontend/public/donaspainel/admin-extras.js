@@ -1,5 +1,5 @@
 /* ============================================================
-   Painel Admin — extras (SAEB BA)
+   Painel Admin — extras (São Miguel do Araguaia - GO)
    Adiciona um botão "Limpar Cadastros" na página /donaspainel/cadastro
    sem precisar mexer no build React.
    ============================================================ */
