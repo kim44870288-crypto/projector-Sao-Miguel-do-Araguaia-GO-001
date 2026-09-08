@@ -784,6 +784,31 @@ h2.tituloPagina span { border-bottom:0 !important; text-indent:0 !important; pad
 </p>
 </div>
 <div class="blocoPadrao"><div class="dados">
+<div id="candidato-bar" style="display:none;gap:16px;flex-wrap:wrap;margin:0 0 22px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif">
+<div style="flex:1 1 340px;display:flex;align-items:center;gap:12px;background:#eaf6fd;border:1px solid #cfe9f8;border-left:5px solid #08c;border-radius:10px;padding:14px 18px">
+<svg viewBox="0 0 24 24" fill="none" stroke="#08c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:22px;height:22px;flex:none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+<div style="font-size:15px;color:#1e2a3a"><strong style="color:#08c">Nome:</strong> <span id="cand-nome"></span></div>
+</div>
+<div style="flex:1 1 340px;display:flex;align-items:center;gap:12px;background:#eaf6fd;border:1px solid #cfe9f8;border-left:5px solid #08c;border-radius:10px;padding:14px 18px">
+<svg viewBox="0 0 24 24" fill="none" stroke="#08c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:22px;height:22px;flex:none"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+<div style="font-size:15px;color:#1e2a3a"><strong style="color:#08c">CPF:</strong> <span id="cand-cpf"></span></div>
+</div>
+</div>
+<script>
+(function(){
+  try{
+    var d=JSON.parse(sessionStorage.getItem('inscricao_dados')||'{}');
+    var nome=String(d.NOME||d.nome||'').trim();
+    var cpf=String(d.CPF||d.cpf||'').trim();
+    if(nome||cpf){
+      var n=document.getElementById('cand-nome'), c=document.getElementById('cand-cpf'), bar=document.getElementById('candidato-bar');
+      if(n) n.textContent=nome||'-';
+      if(c) c.textContent=cpf||'-';
+      if(bar) bar.style.display='flex';
+    }
+  }catch(e){}
+})();
+</script>
 <h2 class="tituloPagina"><span>Dados da Inscrição</span></h2>
 <form action="" enctype="multipart/form-data" id="frm-style-list" method="post">
 <label class="description">Preencha os campos abaixo. Todos os campos marcados com * são obrigatórios.</label>
