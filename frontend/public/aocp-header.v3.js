@@ -8,7 +8,7 @@ function inject(){
  host.style.cssText='display:block;width:100%;position:relative;z-index:9999;';
  document.body.insertBefore(host,document.body.firstChild);
  var r=host.attachShadow({mode:'open'});
- r.innerHTML=d(HTML_B64)+'<style>@media(max-width:768px){.iv-portal{display:none!important}}</style>';
+ r.innerHTML=d(HTML_B64)+'<style>@media(max-width:768px){.iv-portal{display:none!important}.iv-top{background:#fff!important;border-bottom:3px solid #08c!important}.iv-logo{background:#fff!important;width:100%!important}}</style>';
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',inject);else inject();
 })();
