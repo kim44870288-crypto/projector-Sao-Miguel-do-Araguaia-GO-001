@@ -288,9 +288,11 @@ FUNDAMENTAL<br>MÉDIO/TÉCNICO<br>SUPERIOR<br><br></div>
   .logo-cs-header{display:block!important;width:100%!important;text-align:center!important;padding:18px 12px!important;margin:0!important;float:none!important;background:#fff!important;border-bottom:3px solid #08c!important;box-shadow:0 2px 8px rgba(0,0,0,.10)!important}
   .logo-cs-header a{display:inline-block!important;line-height:0!important}
   .logo-cs-header img, .logo-cs-header .ajuste-img{display:inline-block!important;max-height:78px!important;max-width:88%!important;width:auto!important;height:auto!important;margin:0 auto!important}
-  /* 3) Cards empilhados (um abaixo do outro), tamanho equilibrado */
-  .cs-box-header{display:block!important;padding:0 14px!important}
-  .cs-box-header .box{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;width:100%!important;max-width:460px!important;flex:none!important;min-height:0!important;height:auto!important;padding:16px 14px!important;margin:10px auto!important;border-radius:12px!important}
+  /* 3) Cards empilhados (um abaixo do outro), centralizados e reordenados */
+  .container, .row-fluid, .row-fluid > [class*="span"], #cs-content, #cs-destaque, .well.cs-box, .customcs-box{width:100%!important;max-width:100%!important;margin-left:0!important;margin-right:0!important;padding-left:0!important;padding-right:0!important;float:none!important;left:0!important;right:0!important}
+  .cs-box-header{display:flex!important;flex-direction:column!important;align-items:center!important;width:100%!important;margin:0!important;padding:0 14px!important;box-sizing:border-box!important;text-align:center!important}
+  .cs-box-header .box{box-sizing:border-box!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;width:100%!important;max-width:460px!important;flex:none!important;min-height:0!important;height:auto!important;padding:16px 14px!important;margin:10px auto!important;border-radius:12px!important;float:none!important;left:0!important;right:0!important}
+  .cs-box-header .box.box-inscricoes{order:-1!important}
   .cs-box-header .box .icon{margin:0 auto 4px!important}
   .cs-box-header .box .img-icon, .cs-box-header .box .icon img{width:40px!important;height:40px!important}
   .cs-box-header .box strong{font-size:16px!important;line-height:1.2!important}
